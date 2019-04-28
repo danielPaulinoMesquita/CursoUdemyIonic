@@ -4,6 +4,7 @@ import { API_CONFIG } from "../../config/api.config";
 import { CategoriaDTO } from "../../models/categoria.dto";
 import { Observable } from "rxjs/Rx";
 
+// O injectable é equivalente a anotação @Service do spring
 @Injectable()
 export class CategoriaService{
     constructor(public http: HttpClient){
