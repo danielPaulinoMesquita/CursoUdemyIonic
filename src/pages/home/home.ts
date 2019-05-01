@@ -47,4 +47,9 @@ export class HomePage {
     error=>{}) 
   }
 
+  signup(){
+    console.log("passou no registrar");
+    this.navCtrl.push('SignupPage');
+  }
+
 }
