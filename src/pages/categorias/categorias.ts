@@ -35,9 +35,9 @@ export class CategoriasPage {
       },
       error =>{});
   }
-
-  showProdutos(){
-    this.navCtrl.push('ProdutosPage');
+//Passando um atributo para outra página(categoria_id para página produtos)
+  showProdutos(categoria_id){
+    this.navCtrl.push('ProdutosPage',{categoria_id:categoria_id});
   }
 
 }
