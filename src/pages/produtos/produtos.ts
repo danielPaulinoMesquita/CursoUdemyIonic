@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ItemSliding } from 'ionic-angular';
+import { IonicPage, NavController, NavParams} from 'ionic-angular';
 import { ProdutoDTO } from '../../models/produto.dto';
 import { ProdutoService } from '../../services/domain/produto.service';
 import { API_CONFIG } from '../../config/api.config';
@@ -36,6 +36,11 @@ export class ProdutosPage {
                 item.imageUrl=`${API_CONFIG.bucketBaseUrl}/prod${item.id}-small.jpg`;
          },error=>{});
      }
+  }
+  //ProdutoDetailPage
+
+  showDetail(){
+    this.navCtrl.push('ProdutoDetailPage');
   }
   
 }
