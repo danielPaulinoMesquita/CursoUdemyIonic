@@ -5,7 +5,6 @@ import { CredencialDTO } from "../models/credencial.dto";
 import { LocalUser } from "../models/local_user";
 import { StorageService } from "./storage.service";
 import {JwtHelper} from "angular2-jwt";
-import { CategoriaService } from "./domain/categoria.service";
 import { CartService } from "./domain/cart.service";
 
 @Injectable()

@@ -59,7 +59,7 @@ items: CarItem[];
   }
 
   checkout() {
-    this.navCtrl.setRoot('PickAddressPage');
+    this.navCtrl.push('PickAddressPage');
   }
 
 }
