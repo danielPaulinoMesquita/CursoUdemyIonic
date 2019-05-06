@@ -20,6 +20,10 @@ export class ProdutosPage {
   }
 
   ionViewDidLoad() {
+    this.loadData();
+  };
+
+  loadData(){
     let categoria= this.navParams.get('categoria_id');
     //Colocar loading aqui, ates de carregar as categorias
     let loader= this.presentLoading();
@@ -31,8 +35,7 @@ export class ProdutosPage {
     },error=>{
       loader.dismiss();
     });
-     
-  };
+  }
 
   loadImageUrls(){
     for(let i=0; i<this.items.length; i++){
@@ -49,6 +52,7 @@ export class ProdutosPage {
     this.navCtrl.push('ProdutoDetailPage',{produto_id:produto_id});
   }
 
+  // LOADING DA TELA  
   presentLoading() {
     const loader = this.loadingController.create({
       content: "Aguarde..."
@@ -57,4 +61,11 @@ export class ProdutosPage {
     return loader;
   }
   
+  doRefresh(refresher) {
+   // this.ionViewDidLoad(); chamando a requisição para carregar novamente o doRefresh
+   this.loadData();
+    setTimeout(() => {
+        refresher.complete();
+    }, 1000);
+  }
 }
