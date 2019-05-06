@@ -26,6 +26,7 @@ export class OrderConfirmationPage {
   cartItems: CarItem[];
   cliente: ClienteDTO;
   endereco: EnderecoDTO;
+  codPedido: string;
 
   constructor(
     public navCtrl: NavController, 
@@ -56,12 +57,20 @@ export class OrderConfirmationPage {
     return this.cartService.total();
   }
 
+  back(){
+    this.navCtrl.setRoot("CartPage");
+  }
+
+  home(){
+    this.navCtrl.setRoot("CategoriasPage");
+  }
+
   checkout(){
     this.pedidoService.insert(this.pedido)
     .subscribe(response=>{
       // para pegar o header da requisição, utiliza-se o response headers
         this.cartService.createOrClearCart();
-        console.log(response.headers.get('location'));
+        this.codPedido= this.extractId(response.headers.get('location'));
     },error=>{
       if(error.status==403){
         this.navCtrl.setRoot('HomePage');
@@ -69,8 +78,10 @@ export class OrderConfirmationPage {
     });
   }
 
-  back(){
-    this.navCtrl.setRoot("CartPage");
+  private extractId(location:string):string{
+    // let position= location.lastIndexOf("/");
+    // outra forma de obter o id do pedido depois de realizado a confirmação
+    let position= location.substring(location.length-1,location.length);
+    return position;
   }
-
 }
