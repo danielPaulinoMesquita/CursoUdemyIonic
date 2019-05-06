@@ -11,7 +11,11 @@ import { API_CONFIG } from '../../config/api.config';
 })
 export class ProdutosPage {
 
-  items : ProdutoDTO[];
+  items : ProdutoDTO[]=[];
+
+  page: number=0;
+
+
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
@@ -27,18 +31,20 @@ export class ProdutosPage {
     let categoria= this.navParams.get('categoria_id');
     //Colocar loading aqui, ates de carregar as categorias
     let loader= this.presentLoading();
-    this.produtoService.findByCategoria(categoria)
+    this.produtoService.findByCategoria(categoria,this.page, 10)
     .subscribe(response=>{
-      this.items=response['content'];
+      let start=this.items.length;
+      this.items=this.items.concat(response['content']);
+      let end=this.items.length;
       loader.dismiss();
-      this.loadImageUrls();
+      this.loadImageUrls(start,end);
     },error=>{
       loader.dismiss();
     });
   }
 
-  loadImageUrls(){
-    for(let i=0; i<this.items.length; i++){
+  loadImageUrls(start: number, end: number){
+    for(let i=start; i<end; i++){
         let item=this.items[i];
         this.produtoService.getSmallImageFromBucket(item.id)
         .subscribe(response=>{
@@ -62,10 +68,20 @@ export class ProdutosPage {
   }
   
   doRefresh(refresher) {
+    this.page=0;
+    this.items=[];
    // this.ionViewDidLoad(); chamando a requisição para carregar novamente o doRefresh
    this.loadData();
     setTimeout(() => {
         refresher.complete();
+    }, 1000);
+  }
+
+  doInfinite(infiniteScroll) {
+    this.page++;
+    this.loadData();
+    setTimeout(() => {
+      infiniteScroll.complete();
     }, 1000);
   }
 }
