@@ -33,8 +33,11 @@ export class ProfilePage {
   }
 
   ionViewDidLoad() {
-
-    let localUser= this.storage.getLocalUser();
+    this.loadData();
+    
+  }
+  loadData(){
+      let localUser= this.storage.getLocalUser();
 
     if(localUser && localUser.email){
        this.service.findByEmail(localUser.email).subscribe(response => {
@@ -50,7 +53,6 @@ export class ProfilePage {
       this.navCtrl.setRoot("HomePage");
     }
   }
-
   getImageIfExists(){
     this.service.getImageFromBucket(this.cliente.id)
     .subscribe(response=>{
@@ -77,6 +79,20 @@ export class ProfilePage {
     }, (err) => {
      // Handle error
     });
+  }
+  
+  sendPicture(){
+    this.service.uploadPicture(this.picture)
+    .subscribe(response => {
+      this.picture = null;
+      this.loadData();
+    },
+    error => {
+    });
+  }
+
+  cancel() {
+    this.picture = null;
   }
 
 }
