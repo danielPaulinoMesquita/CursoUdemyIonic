@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { StorageService } from '../../services/storage.service';
 import { ClienteDTO } from '../../models/cliente.dto';
 import { ClienteService } from '../../services/domain/cliente.service';
@@ -29,7 +29,8 @@ export class ProfilePage {
     public navParams: NavParams,
     public storage: StorageService,
     public service: ClienteService,
-    public camera: Camera) {
+    public camera: Camera,
+    public loadingController: LoadingController) {
   }
 
   ionViewDidLoad() {
@@ -80,19 +81,50 @@ export class ProfilePage {
      // Handle error
     });
   }
+  getGalleryPicture(){
+    this.cameraOn=true;
+
+    const options: CameraOptions = {
+      quality: 100,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+    
+    this.camera.getPicture(options).then((imageData) => {
+     // imageData is either a base64 encoded string or a file URI
+     // If it's base64 (DATA_URL):
+     this.picture = 'data:image/png;base64,' + imageData;
+     this.cameraOn=false;
+    }, (err) => {
+     // Handle error
+    });
+  }
   
   sendPicture(){
+    let loader= this.presentLoading();
     this.service.uploadPicture(this.picture)
     .subscribe(response => {
       this.picture = null;
       this.loadData();
+      loader.dismiss();
     },
     error => {
+      loader.dismiss();
     });
   }
 
   cancel() {
     this.picture = null;
+  }
+
+  presentLoading() {
+    const loader = this.loadingController.create({
+      content: "Aguarde..."
+    });
+    loader.present();
+    return loader;
   }
 
 }
