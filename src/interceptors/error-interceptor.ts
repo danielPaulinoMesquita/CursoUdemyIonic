@@ -13,7 +13,6 @@ constructor(public storage: StorageService, public alertCtrl: AlertController){
 }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log("Passou no interceptor");
         return next.handle(req)
 
         // variável error dentro do catch significa a excessão na hora da requisição
